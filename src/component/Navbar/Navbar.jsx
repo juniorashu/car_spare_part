@@ -1,6 +1,6 @@
 // src/components/Navbar.jsx
 import React from "react";
-// import ".../App.css"; // reuse same styles if needed
+import "./Navbar.css"; // reuse same styles if needed
 
 function Navbar({ searchTerm, setSearchTerm }) {
   return (
