@@ -1,12 +1,15 @@
 // src/components/Navbar.jsx
 import React from "react";
-import "./Navbar.css"; // reuse same styles if needed
+import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 function Navbar({ searchTerm, setSearchTerm }) {
   return (
     <header className="header">
       <div className="logo">
-        <span>🛒</span> AUTOPARTS PRO
+        <Link to="/" className="logo-link">
+          <span>🛒</span> AUTOPARTS PRO
+        </Link>
         <small>Performance • Precision</small>
       </div>
 
@@ -20,10 +23,11 @@ function Navbar({ searchTerm, setSearchTerm }) {
         <button className="btn-red">Search</button>
       </div>
 
-      <nav>
-        <a href="#shop">Shop</a>
-        <a href="#orders">Orders</a>
-        <a href="#admin">Admin</a>
+      <nav className="nav-links">
+        <Link to="/shop" className="nav-item">Shop</Link>
+        <Link to="/cart" className="nav-item">Orders</Link>
+        <Link to="/adminLogin" className="nav-item">Admin</Link>
+
         <button className="icon-btn">👤</button>
         <button className="icon-btn">
           🛒<span className="cart-count">0</span>

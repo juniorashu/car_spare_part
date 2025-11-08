@@ -1,98 +1,61 @@
 import React, { useState } from "react";
-import "./App.css";
-import Navbar from "./component/Navbar/Navbar";
-import Categories from "./component/categories/categories";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import LandingPage from "./component/ProductList/productList.jsx";
+import CartPage from "./component/Card/CartPage.jsx";
+import Navbar from "./component/Navbar/Navbar.jsx";
+import AdminUpload from "./component/Upload/AdminUpload.jsx";
+import AdminLogin from "./component/Admin Longin and signin/AdminLogin.jsx";
+import ProductDetails from "./component/detailPage/ProductDetail.jsx";
 
-const brands = ["TorqueX", "Bosca", "Lumina", "GripMax", "SteelCore", "AutoStyle"];
-const categories = ["Engine", "Brakes", "Lighting", "Tires", "Accessories"];
+const App = () => {
+  const [cart, setCart] = useState([]);
 
-const products = [
-  {
-    id: 1,
-    title: "Bosca Ceramic Brake Pads",
-    brand: "Bosca",
-    category: "Brakes",
-    price: 89.0,
-  },
-  {
-    id: 2,
-    title: "Bosca Drilled Brake Rotors",
-    brand: "Bosca",
-    category: "Brakes",
-    price: 199.0,
-  },
-];
+  const handleAddToCart = (product) => {
+    setCart((prevCart) => {
+      const exists = prevCart.find((item) => item.id === product.id);
+      if (exists) {
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prevCart, { ...product, quantity: 1 }];
+    });
+  };
 
-function App() {
-  const [bgBlack, setBgBlack] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("Bosca");
-  const [priceRange, setPriceRange] = useState({ min: 15, max: 199 });
-  const [inStockOnly, setInStockOnly] = useState(false);
-
-  const toggleBackground = () => setBgBlack((prev) => !prev);
-
-  const filteredProducts = products.filter(
-    (p) =>
-      p.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      p.price >= priceRange.min &&
-      p.price <= priceRange.max
-  );
+  const handleRemoveFromCart = (id) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+  };
 
   return (
-    <div className={`app ${bgBlack ? "dark-bg" : "light-bg"}`}>
-      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+    <Router>
+      <nav
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "1rem 2rem",
+          background: "#111",
+          color: "#fff",
+        }}
+      > 
 
-      <main className="main-content">
-      <Categories
-          categories={categories}
-          brands={brands}
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
-          inStockOnly={inStockOnly}
-          setInStockOnly={setInStockOnly}
-        />
+      
+        <Navbar />
+      </nav>
 
-        <section className="products">
-         <h3>
-            Products <small>{filteredProducts.length} results for “{searchTerm}”</small>
-          </h3>
-
-          <div className="product-list">
-            {filteredProducts.map((p) => (
-              <div className="product-card" key={p.id}>
-                <div className="product-image">
-                  <div className="circle-chart"></div>
-                </div>
-                <div className="product-info">
-                  <h4>{p.title}</h4>
-                  <small>
-                    {p.brand} • {p.category}
-                  </small>
-                  <div className="product-actions">
-                    <span className="price">${p.price.toFixed(2)}</span>
-                    <button className="btn-view">View</button>
-                    <button className="btn-red">Add</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="pagination">
-            <button disabled>Prev</button>
-            <button className="btn-red">1</button>
-            <button disabled>Next</button>
-          </div>
-        </section>
-      </main>
-
-      <footer>
-        <button onClick={toggleBackground} className="btn-switch-bg">
-          Switch to {bgBlack ? "Light" : "Dark"} Background
-        </button>
-      </footer>
-    </div>
+      <Routes>
+        
+        <Route path="/" element={<LandingPage onAddToCart={handleAddToCart} />} />
+        <Route path="/cart" element={<CartPage cart={cart} onRemoveFromCart={handleRemoveFromCart} /> } />
+        <Route path="/admin/upload" element={<AdminUpload />} />
+        <Route path="adminLogin" element={<AdminLogin />} />
+         <Route path="*" element={<AdminLogin />} /> 
+         <Route path="/Product/:id" element={<ProductDetails />}></Route>
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
