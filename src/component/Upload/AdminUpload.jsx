@@ -7,7 +7,7 @@ const AdminUpload = () => {
     name: "",
     description: "",
     price: "",
-    files: [], // ✅ store multiple files
+    mainFiles: [], // only main product images
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -46,31 +46,33 @@ const AdminUpload = () => {
 
   if (checkingAuth) return <p>🔒 Checking admin permissions...</p>;
 
-  // ✅ Handle text changes
+  // ✅ Handle text input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
   };
 
-  // ✅ Handle multiple files
-  const handleFileChange = (e) => {
-    setProduct({ ...product, files: Array.from(e.target.files) });
+  // ✅ Handle main image selection
+  const handleMainFileChange = (e) => {
+    setProduct({ ...product, mainFiles: Array.from(e.target.files) });
   };
 
-  // ✅ Upload product with multiple images
+  // ✅ Upload product (main images only)
   const handleUpload = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      const { name, description, price, files } = product;
-      if (!files.length) throw new Error("Please select at least one image");
+      const { name, description, price, mainFiles } = product;
 
-      const uploadedPaths = [];
-      const uploadedUrls = [];
+      if (!mainFiles.length) throw new Error("Please select product images");
 
-      for (const file of files) {
+      const imagePath = [];
+      const imageUrls = [];
+
+      // Upload main product images
+      for (const file of mainFiles) {
         const filePath = `products/${Date.now()}_${file.name}`;
         const { error: uploadError } = await supabase.storage
           .from("product-images")
@@ -82,25 +84,47 @@ const AdminUpload = () => {
           .from("product-images")
           .getPublicUrl(filePath);
 
-        uploadedPaths.push(filePath);
-        uploadedUrls.push(publicData.publicUrl);
+        imagePath.push(filePath);
+        imageUrls.push(publicData.publicUrl);
+
+        // ✅ Call Edge Function to generate thumbnail automatically
+        await fetch(
+          "https://qyidjkttdvewsackfqxa.functions.supabase.co/generate-thumbnails"
+,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-client-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9_super_secure_9847", // same as FRONTEND_CALL_SECRET in Edge Function
+            },
+            body: JSON.stringify({
+              bucket: "product-images",
+              path: filePath,
+            }),
+          }
+        );
       }
 
-      // ✅ Insert product into Supabase
+      // ✅ Insert product data into Supabase
       const { error: insertError } = await supabase.from("products").insert([
         {
           name,
           description,
           price,
-          image_path: uploadedPaths,
-          image_url: uploadedUrls, // store array of URLs
+          image_path: imagePath,
+          image_urls: imageUrls,
         },
       ]);
 
       if (insertError) throw insertError;
 
       setMessage("✅ Product uploaded successfully!");
-      setProduct({ name: "", description: "", price: "", files: [] });
+      setProduct({
+        name: "",
+        description: "",
+        price: "",
+        mainFiles: [],
+      });
     } catch (error) {
       console.error(error.message);
       setMessage("❌ " + error.message);
@@ -149,12 +173,13 @@ const AdminUpload = () => {
           required
         />
 
-        {/* ✅ Multiple file input */}
+        {/* ✅ Upload main product images */}
+        <label>Main Product Images:</label>
         <input
           type="file"
           accept="image/*"
           multiple
-          onChange={handleFileChange}
+          onChange={handleMainFileChange}
           required
         />
 

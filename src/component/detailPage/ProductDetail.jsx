@@ -9,15 +9,31 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", id)
-        .single();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-      if (error) console.error(error);
-      else setProduct(data);
-    };
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  // Convert every Supabase path to public URL
+  const urls = data.image_urls.map((path) => {
+    const { data: publicData } = supabase.storage
+      .from("product-images")
+      .getPublicUrl(path);
+    return publicData.publicUrl;
+  });
+
+  data.image_urls = urls;
+  setProduct(data);
+};
+
+
+
 
     fetchProduct();
   }, [id]);
@@ -27,7 +43,7 @@ const ProductDetail = () => {
   return (
     <div className="product-detail">
       <h2>{product.name}</h2>
-      <ProductGallery images={[product.image_url]} />
+      <ProductGallery images={[product.image_urls]} />
       <p>{product.description}</p>
       <strong>Price: ${product.price}</strong>
     </div>
