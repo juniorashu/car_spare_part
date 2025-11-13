@@ -7,7 +7,7 @@ const AdminUpload = () => {
     name: "",
     description: "",
     price: "",
-    mainFiles: [], // only main product images
+    mainFiles: [],
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -49,12 +49,12 @@ const AdminUpload = () => {
   // ✅ Handle text input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
   // ✅ Handle main image selection
   const handleMainFileChange = (e) => {
-    setProduct({ ...product, mainFiles: Array.from(e.target.files) });
+    setProduct((prev) => ({ ...prev, mainFiles: Array.from(e.target.files) }));
   };
 
   // ✅ Upload product (main images only)
@@ -68,12 +68,13 @@ const AdminUpload = () => {
 
       if (!mainFiles.length) throw new Error("Please select product images");
 
-      const imagePath = [];
+      const imagePaths = [];
       const imageUrls = [];
 
-      // Upload main product images
+      // Upload each image to Supabase Storage
       for (const file of mainFiles) {
         const filePath = `products/${Date.now()}_${file.name}`;
+
         const { error: uploadError } = await supabase.storage
           .from("product-images")
           .upload(filePath, file);
@@ -84,34 +85,17 @@ const AdminUpload = () => {
           .from("product-images")
           .getPublicUrl(filePath);
 
-        imagePath.push(filePath);
+        imagePaths.push(filePath);
         imageUrls.push(publicData.publicUrl);
-
-        // ✅ Call Edge Function to generate thumbnail automatically
-        await fetch(
-          "https://qyidjkttdvewsackfqxa.functions.supabase.co/generate-thumbnails"
-,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-client-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9_super_secure_9847", // same as FRONTEND_CALL_SECRET in Edge Function
-            },
-            body: JSON.stringify({
-              bucket: "product-images",
-              path: filePath,
-            }),
-          }
-        );
       }
 
-      // ✅ Insert product data into Supabase
+      // ✅ Save product details in Supabase
       const { error: insertError } = await supabase.from("products").insert([
         {
           name,
           description,
           price,
-          image_path: imagePath,
+          image_path: imagePaths,
           image_urls: imageUrls,
         },
       ]);
@@ -133,7 +117,7 @@ const AdminUpload = () => {
     }
   };
 
-  // ✅ Logout
+  // ✅ Logout admin
   const handleLogout = async () => {
     await supabase.auth.signOut();
     window.location.href = "/admin/login";
@@ -173,7 +157,6 @@ const AdminUpload = () => {
           required
         />
 
-        {/* ✅ Upload main product images */}
         <label>Main Product Images:</label>
         <input
           type="file"
