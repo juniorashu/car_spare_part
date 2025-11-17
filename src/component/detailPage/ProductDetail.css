@@ -1,27 +1,62 @@
+.product-detail-container {
+  display: flex;
+  gap: 0px; /* reduced from 40px */
+  padding: 30px;
+  background: #0f0f12;
+  color: white;
+  border-radius: 10px;
+  justify-content: space-around;
+}
+
+
+.product-gallery-section {
+  flex: 1;
+  margin: auto;
+  padding: auto;
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: 400px;
+  margin: auto;
+}
+
+/* Title and Brand */
 .product-info h2 {
   font-size: 1.8rem;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .brand {
   color: #ccc;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   margin-bottom: 15px;
+}
+
+/* Price & Availability */
+.price h3 {
+  color: #ff1e1e;
+  font-size: 1.6rem;
+  margin-bottom: 5px;
+}
+
+.availability span {
+  color: #00ff84;
 }
 
 .desc {
   color: #aaa;
   line-height: 1.6;
-  margin-bottom: 20px;
+  margin: 15px 0;
+  border-top: 1px solid #333;
+  padding-top: 10px;
 }
 
-.price h3 {
-  color: #ff1e1e;
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-}
-
+/* Options */
 .options label {
   display: block;
   margin-top: 10px;
@@ -38,6 +73,28 @@ select {
   border: 1px solid #333;
 }
 
+/* Product Specs */
+.customization {
+  margin-top: 20px;
+}
+
+.customization h4 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #ff1e1e;
+}
+
+.customization ul {
+  list-style: none;
+  padding: 0;
+}
+
+.customization ul li {
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+/* Buttons */
 .actions {
   display: flex;
   gap: 15px;
@@ -51,13 +108,14 @@ button {
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  max-height: 5rem;
 }
 
-/* .add-to-carts {
+.add-to-carts {
   background: #2a2a2f;
   color: white;
-} */
+  max-width: 100px;
+  min-height: 5px;
+}
 
 .add-to-carts:hover {
   background: #3a3a42;
@@ -66,8 +124,44 @@ button {
 .buy-now {
   background: #e31b23;
   color: white;
+  max-width: 100px;
 }
 
 .buy-now:hover {
   background: #ff1e1e;
+}
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+  .product-detail-container {
+    flex-direction: column;
+  }
+}
+
+.product-detail-container {
+  display: flex;
+  gap: 20px; /* reduced from 40px to 20px */
+  padding: 30px;
+  background: #0f0f12;
+  color: white;
+  border-radius: 10px;
+  justify-content: space-around;
+}
+
+/* Remove default margins */
+
+
+/* Only apply 10px spacing on desktop */
+@media (min-width: 900px) {
+  .product-detail-container {
+    gap: 20px; /* ensures consistent spacing on desktop */
+  }
+}
+
+/* Mobile view — stacked layout */
+@media (max-width: 899px) {
+  .product-detail-container {
+    flex-direction: column;
+    gap: 20px; /* space between image and info vertically */
+  }
 }

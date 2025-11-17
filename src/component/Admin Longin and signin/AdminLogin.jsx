@@ -17,12 +17,13 @@ const AdminLogin = () => {
 
     try {
       // Login with Supabase email + password
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data,  } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+
+
       const user = data.user;
        // check if user exists in admin table
         const { data: adminData, error: adminError } = await supabase.from("admins").select("*").eq("id", user.id).single();

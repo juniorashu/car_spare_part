@@ -26,8 +26,8 @@
 }
 
 .main-image img {
-  width: 400px;
-  height: 400px;
+  width: 600px;
+  height: 500px;
   border-radius: 12px;
   object-fit: cover;
   transition: all 0.3s ease-in-out;

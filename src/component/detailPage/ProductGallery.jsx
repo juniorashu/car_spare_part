@@ -8,10 +8,7 @@ const ProductGallery = ({ images = [] }) => {
 
   return (
     <div className="gallery-container">
-      {/* Main large image */}
-      <div className="main-image">
-        <img src={mainImage} alt="Main product" />
-      </div>
+    
 
       {/* Thumbnail list */}
       <div className="thumbnail-list">
@@ -25,6 +22,10 @@ const ProductGallery = ({ images = [] }) => {
             onClick={() => setMainImage(img)} // or click to change
           />
         ))}
+      </div>
+        {/* Main large image */}
+      <div className="main-image">
+        <img src={mainImage} alt="Main product" />
       </div>
     </div>
   );

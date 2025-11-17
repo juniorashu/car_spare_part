@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import LandingPage from "./component/ProductList/productList.jsx";
-import CartPage from "./component/Card/CartPage.jsx";
+import CartPage from "./component/Card/cartPage.jsx";
 import Navbar from "./component/Navbar/Navbar.jsx";
 import AdminUpload from "./component/Upload/AdminUpload.jsx";
 import AdminLogin from "./component/Admin Longin and signin/AdminLogin.jsx";
 import ProductDetails from "./component/detailPage/ProductDetail.jsx";
+import Signup from "./component/login & logout/SignUp.jsx";
+import Login from "./component/login & logout/Login.jsx";
 
 const App = () => {
   const [cart, setCart] = useState([]);
@@ -53,6 +55,9 @@ const App = () => {
         <Route path="adminLogin" element={<AdminLogin />} />
          <Route path="*" element={<AdminLogin />} /> 
          <Route path="/Product/:id" element={<ProductDetails />}></Route>
+         <Route path="/SignUp" element={<Signup />}></Route>
+         <Route path="/login" element={<Login />}></Route>
+         
       </Routes>
     </Router>
   );
