@@ -60,35 +60,34 @@ const imageUrl = image && image.length > 0 ? getPublicUrl(image[0]) : null;
     if (!error) deleteItem();
   }
   return (
-    <div className="cart-item">
-      
-      {/* Product Image */}
-{imageUrl && (
-  <img
-    src={imageUrl}
-    alt={title}
-    className="cart-item-image"
-  />
-)}
-      {/* Product Details */}
-      <div className="cart-item-info">
-        <h3>{title}</h3>
-        <p>{description}</p>
-        <span className="cart-item-price">{price}</span>
-      </div>
+   <div className="cart-item">
+  
 
-      {/* Quantity Selector */}
-      <div className="quantity-control">
-        <button onClick={decreaseQuantityDB} className="qty-btn">−</button>
-        <span className="qty-display">{quantity}</span>
-        <button onClick={increaseQuantityDB} className="qty-btn">+</button>
-      </div>
+    <p className="cart-description">{description}</p>
 
-      {/* Delete Icon */}
-      <button className="delete-icon" onClick={deleteItemDB}>
-        🗑
-      </button>
-    </div>
+    {imageUrl && (
+      <img
+        src={imageUrl}
+        alt={title}
+        className="cart-item-image"
+      />
+    )}
+
+
+  <div className="cart-item-info">
+    <h3>{title}</h3>
+    <span className="cart-item-price">{price}</span>
+  </div>
+
+  <div className="quantity-control">
+    <button onClick={decreaseQuantityDB} className="qty-btn">−</button>
+    <span className="qty-display">{quantity}</span>
+    <button onClick={increaseQuantityDB} className="qty-btn">+</button>
+  </div>
+
+  <button className="delete-icon" onClick={deleteItemDB}>🗑</button>
+</div>
+
   );
 };
 

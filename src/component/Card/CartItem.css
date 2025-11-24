@@ -1,13 +1,31 @@
 .cart-item {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;        /* IMPORTANT: allows description to push items down */
   background: #fff;
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #e6e6e6;
   gap: 20px;
   width: 100%;
+  align-items: center;
 }
+
+.cart-description {
+  width: 90%;             /* covers 90% of the cart width */
+  margin-bottom: 10px;    /* space below the text */
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
+  display: block;         /* forces it onto its own line */
+}
+
+.cart-item-left {
+  display: flex;
+  flex-direction: column; /* description above image */
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
 
 /* LEFT: Image */
 .cart-item-image {

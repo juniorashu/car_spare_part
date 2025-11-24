@@ -6,42 +6,45 @@ import "./AdminLogin.css";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); // optional if you want password check
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setMessage("");
+  setLoading(true);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setMessage("");
-    setLoading(true);
-
-    try {
-      // Login with Supabase email + password
-      const { data,  } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-
-
-      const user = data.user;
-       // check if user exists in admin table
-        const { data: adminData, error: adminError } = await supabase.from("admins").select("*").eq("id", user.id).single();
-        if (adminError || !adminData) {
-          throw new Error("Access denied. Not an admin user.");
-        }
-
-      setMessage("✅ Login successful! Redirecting...");
-      // Redirect after 1 second
-      setTimeout(() => {
-        navigate("/admin/upload");
-      }, 1000);
-    } catch (error) {
-      setMessage("❌ " + error.message);
-    } finally {
-      setLoading(false);
+  try {
+    // Sign in via Supabase Auth
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInError || !data?.user) {
+      throw new Error(signInError?.message || "Invalid email or password.");
     }
-  };
+
+    const userId = data.user.id;
+
+    // Check if user is an admin
+    const { data: adminData, error: adminError } = await supabase
+      .from("admins")
+      .select("*")
+      .eq("id", userId)
+      .single();
+
+    if (adminError || !adminData) {
+      throw new Error("Access denied. Not an admin user.");
+    }
+
+    setMessage("✅ Login successful! Redirecting...");
+    setTimeout(() => {
+      navigate("/admin/upload");
+    }, 1000);
+  } catch (error) {
+    setMessage("❌ " + error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="login-container">

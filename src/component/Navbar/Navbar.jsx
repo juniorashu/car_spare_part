@@ -6,7 +6,6 @@ import supabase from "../../lib/supabaseClient";
 
 function Navbar({ searchTerm, setSearchTerm }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // 🔥 Check user immediately on mount
@@ -76,7 +75,7 @@ function Navbar({ searchTerm, setSearchTerm }) {
 
         <button className="icon-btn">👤</button>
         <button className="icon-btn">
-          🛒 <span className="cart-count">0</span>
+          🛒 <span className="cart-count"></span>
         </button>
       </nav>
     </header>

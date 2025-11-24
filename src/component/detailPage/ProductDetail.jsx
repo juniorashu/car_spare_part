@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {  useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import supabase from "../../lib/supabaseClient";
 import ProductGallery from "./ProductGallery";
 import "./ProductDetail.css";
@@ -118,6 +118,10 @@ async function addToCartDB(userId, productId) {
     <div className="product-detail-container">
       {/* Left Section: Image Gallery */}
       <div className="product-gallery-section">
+        <p className="desc">
+          {product.description ||
+            "Durable and high-quality front brake disc compatible with Toyota Corolla 2014–2019 models. Designed for smooth braking performance and longer lifespan."}
+        </p>
         <ProductGallery images={images} />
       </div>
 
@@ -135,42 +139,16 @@ async function addToCartDB(userId, productId) {
           </p>
         </div>
 
-        <p className="desc">
-          {product.description ||
-            "Durable and high-quality front brake disc compatible with Toyota Corolla 2014–2019 models. Designed for smooth braking performance and longer lifespan."}
-        </p>
+        
 
-        <div className="options">
-          <label>Condition</label>
-          <select>
-            <option>Brand New</option>
-            <option>Used</option>
-            <option>Refurbished</option>
-          </select>
-
-          <label>Vehicle Compatibility</label>
-          <select>
-            <option>Toyota Corolla</option>
-            <option>Toyota Camry</option>
-            <option>Toyota Hilux</option>
-            <option>Other models</option>
-          </select>
-
-          <label>Warranty</label>
-          <select>
-            <option>6 Months</option>
-            <option>12 Months</option>
-            <option>No Warranty</option>
-          </select>
-        </div>
-
+       
         <div className="customization">
           <h4>Product Details</h4>
           <ul>
-            <li>Material: {product.material || "High-carbon steel"}</li>
+          
             <li>Weight: {product.weight || "3.5 kg"}</li>
             <li>Origin: {product.origin || "China"}</li>
-            <li>Category: {product.category || "Braking System"}</li>
+        
           </ul>
         </div>
 

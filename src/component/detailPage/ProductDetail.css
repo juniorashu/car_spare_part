@@ -32,7 +32,8 @@
 }
 
 .brand {
-  color: #ccc;
+  color: #000000;
+  font-family:bold;
   font-size: 0.95rem;
   margin-bottom: 15px;
 }
@@ -49,11 +50,14 @@
 }
 
 .desc {
-  color: #aaa;
+  color:black;
   line-height: 1.6;
   margin: 15px 0;
   border-top: 1px solid #333;
   padding-top: 10px;
+  font-size: 1.2rem;
+  font-family: bold;
+  
 }
 
 /* Options */
@@ -90,7 +94,7 @@ select {
 }
 
 .customization ul li {
-  color: #aaa;
+  color:black;
   margin-bottom: 6px;
 }
 
@@ -142,7 +146,7 @@ button {
   display: flex;
   gap: 20px; /* reduced from 40px to 20px */
   padding: 30px;
-  background: #0f0f12;
+  background:white;
   color: white;
   border-radius: 10px;
   justify-content: space-around;

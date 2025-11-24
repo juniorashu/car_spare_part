@@ -47,7 +47,7 @@ const ProductList = () => {
               <div className="product-card" key={product.id}>
                 <img src={mainImage} alt={product.name || "Product"} />
                 <h3>{product.name}</h3>
-                <p>{product.description}</p>
+                
                 <strong>${product.price}</strong>
                 <button
                   className="add-to-cart-btn"
