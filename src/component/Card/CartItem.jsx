@@ -51,14 +51,17 @@ const imageUrl = image && image.length > 0 ? getPublicUrl(image[0]) : null;
     if (!error) decreaseQty();
   }
   // 🔥 Delete item from Supabase
-  async function deleteItemDB() {
+  async function deleteItemDB(id) {
     const { error } = await supabase
       .from("cart")
       .delete()
       .eq("id", id);
 
     if (!error) deleteItem();
+     console.log(id);
   }
+ 
+  
   return (
    <div className="cart-item">
   
@@ -85,7 +88,7 @@ const imageUrl = image && image.length > 0 ? getPublicUrl(image[0]) : null;
     <button onClick={increaseQuantityDB} className="qty-btn">+</button>
   </div>
 
-  <button className="delete-icon" onClick={deleteItemDB}>🗑</button>
+  <button className="delete-icon" onClick={() =>deleteItemDB(id)}>🗑</button>
 </div>
 
   );
